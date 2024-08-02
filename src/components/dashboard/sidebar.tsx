@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import Link from "next/link";
 
 interface MenuItem {
   title: string;
@@ -22,10 +23,16 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   {
     title: "Dashboard",
-    route: "/dashboard",
+    route: '/dashboard',
     icon: <Home size={20} />,
   },
   {
+    title: "User",
+    route: "/dashboard/user",
+    icon: <Home size={20} />,
+  },
+  {
+    route: "/dashboard",
     title: "Asset Management",
     icon: <Calculator size={20} />,
     subtitle: [
@@ -70,11 +77,6 @@ const menuItems: MenuItem[] = [
   {
     title: "Laporan",
     route: "/dashboard/laporan",
-    icon: <Calculator size={20} />,
-  },
-  {
-    title: "Logout",
-    route: "/logout",
     icon: <Calculator size={20} />,
   },
 ];
@@ -123,6 +125,7 @@ const Sidebar = () => {
                 )}
               </AccordionItem>
             ))}
+            <Link href={'/sign-in'} className="ml-[45px]">Logout</Link>
           </Accordion>
         </div>
       </div>

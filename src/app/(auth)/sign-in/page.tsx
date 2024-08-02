@@ -123,14 +123,14 @@ export default function Home() {
               <div className="mt-4 w-full flex gap-2">
                 <Link href={'/dashboard'}
                   type="submit"
-                  className="w-full py-2 bg-[#C6DBE0] rounded-full text-xl text-center text-black  bg-primary hover:bg-[#C6DBE0]/80 font-medium"
+                  className="w-full py-2 bg-[#C6DBE0] rounded-full text-xl text-center text-black hover:bg-[#C6DBE0]/80 font-medium"
                 >
                   Admin
                 </Link>
 
                 <button
                   type="submit"
-                  className="w-full py-2 bg-[#C6DBE0] rounded-full text-xl text-black bg-primary hover:bg-[#C6DBE0]/80 font-medium"
+                  className="w-full py-2 bg-[#C6DBE0] rounded-full text-xl text-black hover:bg-[#C6DBE0]/80 font-medium"
                 >
                   User
                 </button>
