@@ -1,26 +1,62 @@
-import React from "react";
-import Card from "@/components/dashboard/card";
-import Table from "./table";
+"use client";
 
-interface TableData {
-  no: number;
-  tanggalRequest: string;
-  namaBarang: string;
+import React, { useEffect, useState } from "react";
+import Card from "@/components/dashboard/card";
+import axios from "axios";
+import BarangDashboardTable from "./table";
+
+interface Barang {
+  id: number;
+  nama_user: string;
+  tanggal_request: string;
+  status: string;
+  nama_barang: string;
   jumlah: number;
   satuan: string;
-  action: boolean; // true for checkmark, false for cross
 }
 
-const data: TableData[] = [
-  { no: 1, tanggalRequest: "07-02-2024", namaBarang: "Laptop", jumlah: 1, satuan: "Device", action: true },
-  { no: 2, tanggalRequest: "07-02-2024", namaBarang: "Pulpen", jumlah: 1, satuan: "Pack", action: true },
-  { no: 3, tanggalRequest: "07-02-2024", namaBarang: "Kertas", jumlah: 1, satuan: "Rim", action: true },
-  { no: 4, tanggalRequest: "07-02-2024", namaBarang: "Tinta", jumlah: 1, satuan: "Box", action: true },
-  { no: 5, tanggalRequest: "07-02-2024", namaBarang: "Map", jumlah: 1, satuan: "Pcs", action: true },
-  // ... data lainnya
-];
-
 const DashboardPage: React.FC = () => {
+  const [barang, setBarang] = useState<Barang[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchBarang = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        "https://giraffe-adjusted-severely.ngrok-free.app/api/admin/request",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("Response data from fetchBarang:", response.data.data);
+        setBarang(response.data.data);
+      } else {
+        console.error("Unexpected status code:", response.status);
+      }
+    } catch (error) {
+      setError("Error fetching data. Please try again later.");
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBarang();
+  }, []); 
+  if (loading) return <div>Loading...</div>;
+
+  if (error) return <div>{error}</div>;
+
+  if (!barang) return <div>Tidak ada data</div>;
+
   return (
     <div className="bg-white h-full w-full p-6 font-sans flex flex-col">
       <div className="flex flex-col gap-2">
@@ -30,8 +66,7 @@ const DashboardPage: React.FC = () => {
         </p>
       </div>
       <Card />
-
-      <Table data={data} />
+      <BarangDashboardTable data={barang} />
     </div>
   );
 };

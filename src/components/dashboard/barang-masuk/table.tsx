@@ -1,59 +1,57 @@
+"use client";
+
 import React from "react";
 
-interface TableData {
-  no: number;
-  tanggalMasuk: string;
-  namaBarang: string;
-  namaSupplier: string;
-  jumlahMasuk: number;
+
+interface Barang {
+  id: number;
+  nama_barang: string;
+  nama_supplier: string;
+  jumlah_keluar: number;
   satuan: string;
 }
 
 interface TableProps {
-  data: TableData[];
+  data: Barang[];
+  onDelete: (id: number) => void;
 }
 
-const BarangMasukTable: React.FC<TableProps> = ({ data }) => {
+const BarangMasukTable: React.FC<TableProps> = ({ data, onDelete }) => {
+  const handleDelete = (id: number) => {
+    if (onDelete) {
+      onDelete(id);
+    } else {
+      console.error("onDelete function is not provided");
+    }
+  };
+
   return (
     <div className="mt-10">
       <table className="min-w-full bg-white border rounded-xl">
         <thead>
           <tr>
-            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              NO
-            </th>
-            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Tanggal Masuk
-            </th>
-            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Nama Barang
-            </th>
-            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Nama Supplier
-            </th>
-            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Jumlah Masuk
-            </th>
-            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Satuan
-            </th>
-            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Action
-            </th>
+            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">ID</th>
+            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">Nama Barang</th>
+            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">Nama Supplier</th>
+            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">Jumlah Keluar</th>
+            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">Satuan</th>
+            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">Action</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <tr key={index} className="border-t">
-              <td className="px-6 py-4 whitespace-nowrap">{item.no}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.tanggalMasuk}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.namaBarang}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.namaSupplier}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.jumlahMasuk}</td>
+          {data.map((item) => (
+            <tr key={item.id} className="border-t">
+              <td className="px-6 py-4 whitespace-nowrap">{item.id}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{item.nama_barang}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{item.nama_supplier}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{item.jumlah_keluar}</td>
               <td className="px-6 py-4 whitespace-nowrap">{item.satuan}</td>
               <td className="px-6 py-4 whitespace-nowrap flex">
-                <button className="text-red-500 hover:text-red-700 mx-2">
-                  <svg
+                <button
+                  onClick={() => handleDelete(item.id)}
+                  className="text-red-500 hover:text-red-700 mx-2"
+                >
+                   <svg
                     width="21"
                     height="21"
                     viewBox="0 0 21 21"

@@ -91,7 +91,7 @@ const Sidebar = () => {
           <img
             src="/logo/logo-transparent.webp"
             alt="logo"
-            className="h-[250px] w-auto"
+            className="h-[30vh] w-auto"
           />
         </div>
 

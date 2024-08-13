@@ -33,7 +33,7 @@ const Layout = ({ children }: Props) => {
       </div>
       <div className="flex-1 bg-[#A9D6FF]">
         <div className="h-full w-full flex flex-col">
-          <div className="p-6">
+          <div className="p-4">
             <DashboardHeader />
           </div>
           {children}

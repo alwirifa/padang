@@ -18,50 +18,7 @@ interface TableProps {
 }
 
 const BarangDashboardTable: React.FC<TableProps> = ({ data }) => {
-  const handleApprove = (id: number) => {
-    const token = localStorage.getItem("token");
-
-    axios
-      .post(
-        `https://giraffe-adjusted-severely.ngrok-free.app/api/admin/request/approve-reject?id=${id}&status=1`,
-        { status: 1 },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("Approve response:", response.data);
-      })
-      .catch((error) => {
-        console.error("Approve error:", error);
-      });
-  };
-
-  const handleReject = (id: number) => {
-    const token = localStorage.getItem("token");
-
-    axios
-      .post(
-        `https://giraffe-adjusted-severely.ngrok-free.app/api/admin/request/approve-reject?id=${id}&status=2`,
-        { status: 2 },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("Reject response:", response.data);
-      })
-
-      .catch((error) => {
-        console.error("Reject error:", error);
-      });
-  };
+  
 
   return (
     <div className="mt-10">
@@ -87,7 +44,7 @@ const BarangDashboardTable: React.FC<TableProps> = ({ data }) => {
               Satuan
             </th>
             <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Action
+              Status
             </th>
           </tr>
         </thead>
@@ -107,19 +64,8 @@ const BarangDashboardTable: React.FC<TableProps> = ({ data }) => {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">{item.jumlah}</td>
               <td className="px-6 py-4 whitespace-nowrap">{item.satuan}</td>
-              <td className="px-6 py-4 whitespace-nowrap flex">
-                <button
-                  onClick={() => handleApprove(item.id)}
-                  className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={() => handleReject(item.id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
-                >
-                  Reject
-                </button>
+              <td className="px-6 py-4 whitespace-nowrap flex">{item.status}
+               
               </td>
             </tr>
           ))}

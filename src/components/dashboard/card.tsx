@@ -31,11 +31,11 @@ const DashboardCard = [
 
 function Card() {
   return (
-    <div className="grid grid-cols-5 gap-4 mt-6">
+    <div className="grid grid-cols-5 gap-4 mt-4">
       {DashboardCard.map((item, index) => (
         <div
           key={index} 
-          className="flex gap-2 p-6 rounded-xl text-2xl items-center justify-center"
+          className="flex gap-2 p-4 rounded-xl text-2xl items-center justify-center"
           style={{ backgroundColor: item.color }}
         >
           {item.title}

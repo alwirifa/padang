@@ -2,21 +2,20 @@
 
 import React from "react";
 
-interface User {
+interface Supplier {
   id: number;
-  nama: string;
-  username: string;
-  password: string;
-  role: string;
+  nama_supplier: string;
+  alamat: string;
+  nomor_kontak: string;
 }
 
 interface TableProps {
-  data: User[];
+  data: Supplier[];
   onDelete: (id: number) => void;
-  onUpdate: (user: User) => void;
+  onUpdate: (supplier: Supplier) => void;
 }
 
-const UserTable: React.FC<TableProps> = ({ data, onDelete, onUpdate }) => {
+const SupplierTable: React.FC<TableProps> = ({ data, onDelete, onUpdate }) => {
   const handleDelete = (id: number) => {
     if (onDelete) {
       onDelete(id);
@@ -25,9 +24,10 @@ const UserTable: React.FC<TableProps> = ({ data, onDelete, onUpdate }) => {
     }
   };
 
-  const handleUpdate = (user: User) => {
+  
+  const handleUpdate = (supplier: Supplier) => {
     if (onUpdate) {
-      onUpdate(user);
+      onUpdate(supplier);
     } else {
       console.error("onUpdate function is not provided");
     }
@@ -39,19 +39,16 @@ const UserTable: React.FC<TableProps> = ({ data, onDelete, onUpdate }) => {
         <thead>
           <tr>
             <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              No
+              ID
             </th>
             <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Name
+              Nama Supplier
             </th>
             <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Username
+              Alamat
             </th>
             <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Password
-            </th>
-            <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
-              Role
+              No Telp
             </th>
             <th className="px-6 py-3 bg-gray-100 text-left text-xs font-bold text-gray-500 uppercase">
               Action
@@ -62,10 +59,15 @@ const UserTable: React.FC<TableProps> = ({ data, onDelete, onUpdate }) => {
           {data.map((item) => (
             <tr key={item.id} className="border-t">
               <td className="px-6 py-4 whitespace-nowrap">{item.id}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.nama}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.username}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.password}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.role}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                {item.nama_supplier}
+              </td>
+
+              <td className="px-6 py-4 whitespace-nowrap">{item.alamat}</td>
+
+              <td className="px-6 py-4 whitespace-nowrap">
+                {item.nomor_kontak}
+              </td>
               <td className="px-6 py-4 whitespace-nowrap flex gap-2">
                 <button
                   onClick={() => handleDelete(item.id)}
@@ -116,4 +118,4 @@ const UserTable: React.FC<TableProps> = ({ data, onDelete, onUpdate }) => {
   );
 };
 
-export default UserTable;
+export default SupplierTable;

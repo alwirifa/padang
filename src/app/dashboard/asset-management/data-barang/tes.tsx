@@ -43,7 +43,7 @@ const formSchema = z.object({
   name: z.string().optional(),
   username: z.string().optional(),
   password: z.string().optional(),
-  role: z.number(),
+  role: z.number().optional(),
 });
 
 const UsersPage: React.FC = () => {
@@ -312,7 +312,7 @@ const UsersPage: React.FC = () => {
                           onValueChange={(value: string) =>
                             field.onChange(parseInt(value))
                           }
-                    
+                          defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -428,7 +428,7 @@ const UsersPage: React.FC = () => {
                         onValueChange={(value: string) =>
                           field.onChange(parseInt(value))
                         }
-                     
+                        defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>

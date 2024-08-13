@@ -20,12 +20,12 @@ import { toast, Toaster } from "react-hot-toast";
 import Link from "next/link";
 
 const formSchema = z.object({
-  username: z.string(),
+  username: z.string().min(1, { message: "Username is required" }),
   password: z
     .string()
-    .min(3, { message: "Masukan Password" })
+    .min(3, { message: "Password must be at least 3 characters long" })
     .refine((value) => value !== "wrong_password", {
-      message: "Password salah",
+      message: "Incorrect password",
     }),
 });
 
@@ -42,15 +42,28 @@ export default function Home() {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     toast.promise(
       axios
-        .post(`${process.env.NEXT_PUBLIC_BASE_URL}/v1/login-admin`, values, {
-          withCredentials: true,
-        })
+        .post(
+          "https://giraffe-adjusted-severely.ngrok-free.app/api/auth/login",
+          values,
+          {}
+        )
         .then((response) => {
           localStorage.setItem("token", response.data.data.token);
           document.cookie = `token=${response.data.data.token}; path=/;`;
 
+          localStorage.setItem("nama", response.data.data.nama);
+          localStorage.setItem("username", response.data.data.username);
+
+          document.cookie = `role_id=${response.data.data.role_id}; path=/;`;
+
+          document.cookie = `token=${response.data.data.token}; path=/;`;
+
           router.push("/dashboard");
           console.log("Response:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          throw new Error("Login failed. Please try again.");
         }),
       {
         loading: "Loading...",
@@ -62,18 +75,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-login-banner bg-cover bg-center">
-      <div className=" flex flex-col items-center justify-center gap-6 pt-24 ">
+      <div className="flex flex-col items-center justify-center gap-6 pt-24">
         <div>
-          <img src="/logo/logo.webp" alt="logo" className="h-64 w-auto" />
+          <img src="/logo/logo.webp" alt="logo" className="h-[25vh] w-auto" />
         </div>
-        <div className="bg-white rounded-2xl flex flex-col gap-6 justify-center p-10 w-full max-w-md">
-          <h1 className="w-full text-center text-3xl lg:text-5xl font-medium">
+
+        <div className="bg-white rounded-2xl flex flex-col gap-4 justify-center p-6 w-full max-w-sm">
+          <h1 className="w-full text-center text-3xl font-medium">
             Log in to SSNI
           </h1>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleSubmit)}
-              className="w-full flex flex-col gap-4 "
+              className="w-full flex flex-col gap-4"
             >
               <FormField
                 control={form.control}
@@ -87,7 +101,7 @@ export default function Home() {
                       <div className="relative flex items-center">
                         <Input
                           placeholder="Email address"
-                          type="email"
+                          type="text"
                           {...field}
                           className="p-6 bg-[#C6DBE0] placeholder:text-xl placeholder:text-zinc-600 text-primary text-xl rounded-full"
                         />
@@ -121,18 +135,11 @@ export default function Home() {
                 )}
               />
               <div className="mt-4 w-full flex gap-2">
-                <Link href={'/dashboard'}
+                <button
                   type="submit"
                   className="w-full py-2 bg-[#C6DBE0] rounded-full text-xl text-center text-black hover:bg-[#C6DBE0]/80 font-medium"
                 >
-                  Admin
-                </Link>
-
-                <button
-                  type="submit"
-                  className="w-full py-2 bg-[#C6DBE0] rounded-full text-xl text-black hover:bg-[#C6DBE0]/80 font-medium"
-                >
-                  User
+                  Login
                 </button>
               </div>
             </form>
