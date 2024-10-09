@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Card from "@/components/dashboard/card";
 import axios from "axios";
 import BarangDashboardTable from "./table";
@@ -47,13 +47,11 @@ const formSchema = z.object({
   total_request: z.number().optional(),
 });
 
-
 const DashboardPage: React.FC = () => {
   const [barang, setBarang] = useState<Barang[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -106,7 +104,7 @@ const DashboardPage: React.FC = () => {
           "https://giraffe-adjusted-severely.ngrok-free.app/api/user/request",
           {
             ...values,
-            total_request: Number(values.total_request), 
+            total_request: Number(values.total_request),
           },
           {
             headers: {
@@ -142,7 +140,7 @@ const DashboardPage: React.FC = () => {
         <p>Silahkan Request kebutuhan anda</p>
 
         <div className="px-4 py-3 rounded-full bg-[#A9D6FF]">Request Baru</div>
-      
+
         <Dialog>
           <DialogTrigger asChild>
             <div className="flex gap-2 cursor-pointer">
@@ -223,7 +221,7 @@ const DashboardPage: React.FC = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                /> 
+                />
 
                 <DialogFooter className="">
                   <div className="w-full flex justify-center gap-4 ">
@@ -247,10 +245,8 @@ const DashboardPage: React.FC = () => {
             </Form>
           </DialogContent>
         </Dialog>
-
-        
       </div>
-      <BarangDashboardTable data={barang} />
+      {barang ? <BarangDashboardTable data={barang} /> : <div>loading...</div>}
     </div>
   );
 };

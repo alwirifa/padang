@@ -1,11 +1,11 @@
 import React from "react";
-import Search from "../search";
+// import Search from "../search";
 
 function DashboardHeader() {
   return (
     <div className="w-full flex justify-between items-center ">
       <div className="w-full">
-        <Search placeholder="Search ..."/>
+        {/* <Search placeholder="Search ..."/> */}
       </div>
       <div className="flex items-center justify-end gap-4 w-full">
         <div className="bg-black h-16 w-2 mr-6" />

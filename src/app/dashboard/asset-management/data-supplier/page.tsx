@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -372,30 +372,33 @@ const UsersPage: React.FC = () => {
                   </FormItem>
                 )}
               />
-<div className="w-full flex justify-center items-center gap-4">
-
-              <button type="submit" className="btn btn-primary">
-                Update
-              </button>
-              <DialogClose asChild>
-                <button type="button" className="btn btn-secondary">
-                  Cancel
+              <div className="w-full flex justify-center items-center gap-4">
+                <button type="submit" className="btn btn-primary">
+                  Update
                 </button>
-              </DialogClose>
-</div>
+                <DialogClose asChild>
+                  <button type="button" className="btn btn-secondary">
+                    Cancel
+                  </button>
+                </DialogClose>
+              </div>
             </form>
           </Form>
         </DialogContent>
       </Dialog>
 
-      <SupplierTable
-        data={supplier}
-        onDelete={handleDelete}
-        onUpdate={(supplier: Supplier) => {
-          setSelectedSupplier(supplier);
-          setIsUpdateModalOpen(true);
-        }}
-      />
+      {supplier ? (
+        <SupplierTable
+          data={supplier}
+          onDelete={handleDelete}
+          onUpdate={(supplier: Supplier) => {
+            setSelectedSupplier(supplier);
+            setIsUpdateModalOpen(true);
+          }}
+        />
+      ) : (
+        <div>loading...</div>
+      )}
     </div>
   );
 };

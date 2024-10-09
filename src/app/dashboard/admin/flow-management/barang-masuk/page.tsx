@@ -3,7 +3,7 @@
 import BarangMasukTable from "@/components/dashboard/barang-masuk/table";
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -124,7 +124,7 @@ const UsersPage: React.FC = () => {
           "https://giraffe-adjusted-severely.ngrok-free.app/api/admin/barangin",
           {
             ...values,
-            jumlah: Number(values.jumlah), 
+            jumlah: Number(values.jumlah),
           },
           {
             headers: {
@@ -249,7 +249,7 @@ const UsersPage: React.FC = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                /> 
+                />
 
                 <DialogFooter className="">
                   <div className="w-full flex justify-center gap-4 ">
@@ -274,8 +274,12 @@ const UsersPage: React.FC = () => {
           </DialogContent>
         </Dialog>
       </div>
-      {/* Render BarangMasukTable or other components here */}
-      <BarangMasukTable data={barangIn} onDelete={handleDelete} />
+
+      {barangIn ? (
+        <BarangMasukTable data={barangIn} onDelete={handleDelete} />
+      ) : (
+        <div>loading...</div>
+      )}
     </div>
   );
 };

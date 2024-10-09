@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -60,7 +60,6 @@ const UsersPage: React.FC = () => {
     },
   });
 
-
   useEffect(() => {
     if (selectedUser) {
       form.reset({
@@ -71,8 +70,7 @@ const UsersPage: React.FC = () => {
       });
     }
   }, [selectedUser]);
-  
-  
+
   const fetchBarang = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -100,8 +98,6 @@ const UsersPage: React.FC = () => {
     fetchBarang();
     console.log("Selected User:", selectedUser?.id);
   }, [selectedUser]);
-
-
 
   const handleDelete = async (id: number) => {
     try {
@@ -149,8 +145,6 @@ const UsersPage: React.FC = () => {
       }
     );
   };
-
-  
 
   const handleUpdate = async (
     values: z.infer<typeof formSchema>,
@@ -312,7 +306,6 @@ const UsersPage: React.FC = () => {
                           onValueChange={(value: string) =>
                             field.onChange(parseInt(value))
                           }
-                    
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -428,7 +421,6 @@ const UsersPage: React.FC = () => {
                         onValueChange={(value: string) =>
                           field.onChange(parseInt(value))
                         }
-                     
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -458,14 +450,18 @@ const UsersPage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      <UserTable
-        data={user}
-        onDelete={handleDelete}
-        onUpdate={(user: User) => {
-          setSelectedUser(user);
-          setIsUpdateModalOpen(true);
-        }}
-      />
+      {user ? (
+        <UserTable
+          data={user}
+          onDelete={handleDelete}
+          onUpdate={(user: User) => {
+            setSelectedUser(user);
+            setIsUpdateModalOpen(true);
+          }}
+        />
+      ) : (
+        <div>loading..</div>
+      )}
     </div>
   );
 };

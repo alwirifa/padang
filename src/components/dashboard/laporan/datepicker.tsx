@@ -1,9 +1,7 @@
 // src/components/dashboard/laporan/datepicker.tsx
 "use client";
 
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState } from 'react';
 
 interface DateRangePickerProps {
   onDateRangeChange: (startDate: Date | null, endDate: Date | null) => void;
@@ -14,49 +12,36 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateRangeChange, on
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const handleStartDateChange = (date: Date | null) => {
+  const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const date = event.target.value ? new Date(event.target.value) : null;
     setStartDate(date);
     onDateRangeChange(date, endDate);
   };
 
-  const handleEndDateChange = (date: Date | null) => {
+  const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const date = event.target.value ? new Date(event.target.value) : null;
     setEndDate(date);
     onDateRangeChange(startDate, date);
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <label className="text-lg">Silahkan pilih tanggal untuk data yang dibutuhkan.</label>
-      <div className="flex items-center gap-4">
-        <div className="flex flex-col gap-2">
-          <label htmlFor="start-date" className="text-md font-semibold">Dari Tanggal</label>
-          <DatePicker
-            id="start-date"
-            selected={startDate}
-            onChange={handleStartDateChange}
-            dateFormat="yyyy-MM-dd"  // Change format to YYYY-MM-DD
-            className="px-4 py-2 border rounded-md"
-            placeholderText="Pilih Tanggal"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="end-date" className="text-md font-semibold">Hingga Tanggal</label>
-          <DatePicker
-            id="end-date"
-            selected={endDate}
-            onChange={handleEndDateChange}
-            dateFormat="yyyy-MM-dd"  // Change format to YYYY-MM-DD
-            className="px-4 py-2 border rounded-md"
-            placeholderText="Pilih Tanggal"
-          />
-        </div>
-        <button
-          onClick={onPrint}
-          className="bg-green-200 text-black font-semibold px-4 py-2 rounded-md mt-6"
-        >
-          PRINT
-        </button>
-      </div>
+    <div className="flex flex-col gap-4">
+      <input
+        type="date"
+        onChange={handleStartDateChange}
+        className="border rounded p-2"
+      />
+      <input
+        type="date"
+        onChange={handleEndDateChange}
+        className="border rounded p-2"
+      />
+      <button
+        onClick={onPrint}
+        className="bg-blue-500 text-white rounded p-2"
+      >
+        Print
+      </button>
     </div>
   );
 };

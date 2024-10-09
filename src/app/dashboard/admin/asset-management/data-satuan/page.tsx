@@ -3,7 +3,7 @@
 import BarangTable from "@/components/dashboard/data-barang/table";
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -27,7 +27,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
 
-
 interface Satuan {
   id: number;
   nama: string;
@@ -39,9 +38,7 @@ const formSchema = z.object({
 
 const UsersPage: React.FC = () => {
   const [satuan, setSatuan] = useState<Satuan[]>([]);
-  const [selectedSatuan, setSelectedSatuan] = useState<Satuan | null>(
-    null
-  );
+  const [selectedSatuan, setSelectedSatuan] = useState<Satuan | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,7 +55,6 @@ const UsersPage: React.FC = () => {
       });
     }
   }, [selectedSatuan]);
-
 
   useEffect(() => {
     const fetchBarang = async () => {
@@ -165,7 +161,6 @@ const UsersPage: React.FC = () => {
     );
   };
 
-
   return (
     <div className="bg-white h-full w-full font-sans flex flex-col p-4">
       <div className="w-full flex justify-between items-center">
@@ -187,7 +182,6 @@ const UsersPage: React.FC = () => {
           </svg>
           <p className="font-bold">Dashboard</p>
         </Link>
-
 
         <Dialog>
           <DialogTrigger asChild>
@@ -221,7 +215,7 @@ const UsersPage: React.FC = () => {
                   render={({ field }) => (
                     <FormItem className="relative">
                       <p className="font-semibold text-lg translate-y-2">
-                       Nama Satuan
+                        Nama Satuan
                       </p>
                       <FormControl>
                         <div className="relative flex items-center">
@@ -237,7 +231,6 @@ const UsersPage: React.FC = () => {
                     </FormItem>
                   )}
                 />
-
 
                 <div className="w-full flex justify-center gap-4 ">
                   <button
@@ -293,31 +286,34 @@ const UsersPage: React.FC = () => {
                   </FormItem>
                 )}
               />
-          
-<div className="w-full flex justify-center items-center gap-4">
 
-              <button type="submit" className="btn btn-primary">
-                Update
-              </button>
-              <DialogClose asChild>
-                <button type="button" className="btn btn-secondary">
-                  Cancel
+              <div className="w-full flex justify-center items-center gap-4">
+                <button type="submit" className="btn btn-primary">
+                  Update
                 </button>
-              </DialogClose>
-</div>
+                <DialogClose asChild>
+                  <button type="button" className="btn btn-secondary">
+                    Cancel
+                  </button>
+                </DialogClose>
+              </div>
             </form>
           </Form>
         </DialogContent>
       </Dialog>
 
-      <SatuanTable
-        data={satuan}
-        onDelete={handleDelete}
-        onUpdate={(satuan: Satuan) => {
-          setSelectedSatuan(satuan);
-          setIsUpdateModalOpen(true);
-        }}
-      />
+      {satuan ? (
+        <SatuanTable
+          data={satuan}
+          onDelete={handleDelete}
+          onUpdate={(satuan: Satuan) => {
+            setSelectedSatuan(satuan);
+            setIsUpdateModalOpen(true);
+          }}
+        />
+      ) : (
+        <div>loading...</div>
+      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@
 import BarangTable from "@/components/dashboard/data-barang/table";
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -302,14 +302,18 @@ const UsersPage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      <BrandTable
-        data={brand}
-        onDelete={handleDelete}
-        onUpdate={(brand: Brand) => {
-          setSelectedBrand(brand);
-          setIsUpdateModalOpen(true);
-        }}
-      />
+      {brand ? (
+        <BrandTable
+          data={brand}
+          onDelete={handleDelete}
+          onUpdate={(brand: Brand) => {
+            setSelectedBrand(brand);
+            setIsUpdateModalOpen(true);
+          }}
+        />
+      ) : (
+        <div>loading...</div>
+      )}
     </div>
   );
 };

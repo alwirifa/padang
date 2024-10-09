@@ -3,32 +3,9 @@
 import BarangMasukTable from "@/components/dashboard/barang-masuk/table";
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  Select,
-} from "@/components/ui/select";
+import React, { Suspense, useEffect, useState } from "react";
+
 import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
 
 interface Barang {
@@ -48,14 +25,6 @@ const formSchema = z.object({
 const UsersPage: React.FC = () => {
   const [barangIn, setBarangIn] = useState<Barang[]>([]);
   const [barang, setBarang] = useState<any[]>([]);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      jumlah: 0,
-      barang_id: 0,
-    },
-  });
 
   useEffect(() => {
     const fetchBarang = async () => {
@@ -124,7 +93,7 @@ const UsersPage: React.FC = () => {
           "https://giraffe-adjusted-severely.ngrok-free.app/api/admin/barangin",
           {
             ...values,
-            jumlah: Number(values.jumlah), 
+            jumlah: Number(values.jumlah),
           },
           {
             headers: {
@@ -169,113 +138,12 @@ const UsersPage: React.FC = () => {
           </svg>
           <p className="font-bold">Dashboard</p>
         </Link>
-        {/* <Dialog>
-          <DialogTrigger asChild>
-            <div className="flex gap-2 cursor-pointer">
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 28 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M13.8678 2.34973C7.52554 2.34973 2.37817 7.55006 2.37817 13.9576C2.37817 20.3652 7.52554 25.5655 13.8678 25.5655C20.2101 25.5655 25.3575 20.3652 25.3575 13.9576C25.3575 7.55006 20.2101 2.34973 13.8678 2.34973ZM18.4637 15.1184H15.0168V18.6008C15.0168 19.2392 14.4998 19.7616 13.8678 19.7616C13.2359 19.7616 12.7189 19.2392 12.7189 18.6008V15.1184H9.27196C8.64003 15.1184 8.123 14.596 8.123 13.9576C8.123 13.3192 8.64003 12.7968 9.27196 12.7968H12.7189V9.31446C12.7189 8.67603 13.2359 8.15367 13.8678 8.15367C14.4998 8.15367 15.0168 8.67603 15.0168 9.31446V12.7968H18.4637C19.0956 12.7968 19.6126 13.3192 19.6126 13.9576C19.6126 14.596 19.0956 15.1184 18.4637 15.1184Z"
-                  fill="#1D1D1D"
-                />
-              </svg>
-              <p className="font-bold underline">New Barang</p>
-            </div>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-2xl  bg-[#D0D9EB]">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className="w-full flex flex-col gap-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="barang_id"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Masukan Barang</FormLabel>
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(Number(value)); // Convert value to number
-                        }}
-                        value={field.value?.toString() || ""}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Pilih Barang" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {barang.map((item) => (
-                            <SelectItem
-                              key={item.id}
-                              value={item.id.toString()} // Use ID as string for value
-                            >
-                              {item.nama_barang}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="jumlah"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Jumlah</FormLabel>
-                      <FormControl>
-                        <input
-                          type="number"
-                          {...field}
-                          className="w-full p-2 border border-gray-300 rounded"
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            field.onChange(Number(value)); // Convert input to number
-                          }}
-                          value={field.value || ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> 
-
-                <DialogFooter className="">
-                  <div className="w-full flex justify-center gap-4 ">
-                    <button
-                      type="submit"
-                      className="px-8 py-2 bg-[#B9FF99] rounded-md font-sans font-bold"
-                    >
-                      Add
-                    </button>
-                    <DialogClose asChild>
-                      <button
-                        type="button"
-                        className="px-6 py-2 bg-[#FFFCB6] rounded-md font-sans font-bold"
-                      >
-                        Close
-                      </button>
-                    </DialogClose>
-                  </div>
-                </DialogFooter>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog> */}
       </div>
-      {/* Render BarangMasukTable or other components here */}
-      <BarangMasukTable data={barangIn} onDelete={handleDelete} />
+      {barangIn ? (
+        <BarangMasukTable data={barangIn} onDelete={handleDelete} />
+      ) : (
+        <div>loading..</div>
+      )}
     </div>
   );
 };
