@@ -1,14 +1,28 @@
-"use client"
-
+// src/components/dashboard/laporan/datepicker.tsx
 "use client";
 
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const DateRangePicker: React.FC = () => {
+interface DateRangePickerProps {
+  onDateRangeChange: (startDate: Date | null, endDate: Date | null) => void;
+  onPrint: () => void;
+}
+
+const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateRangeChange, onPrint }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+
+  const handleStartDateChange = (date: Date | null) => {
+    setStartDate(date);
+    onDateRangeChange(date, endDate);
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    setEndDate(date);
+    onDateRangeChange(startDate, date);
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -19,10 +33,8 @@ const DateRangePicker: React.FC = () => {
           <DatePicker
             id="start-date"
             selected={startDate}
-            onChange={(date: Date | null, event: React.SyntheticEvent<any> | undefined) => {
-              setStartDate(date);
-            }}
-            dateFormat="dd/MM/yyyy"
+            onChange={handleStartDateChange}
+            dateFormat="yyyy-MM-dd"  // Change format to YYYY-MM-DD
             className="px-4 py-2 border rounded-md"
             placeholderText="Pilih Tanggal"
           />
@@ -32,15 +44,18 @@ const DateRangePicker: React.FC = () => {
           <DatePicker
             id="end-date"
             selected={endDate}
-            onChange={(date: Date | null, event: React.SyntheticEvent<any> | undefined) => {
-              setEndDate(date);
-            }}
-            dateFormat="dd/MM/yyyy"
+            onChange={handleEndDateChange}
+            dateFormat="yyyy-MM-dd"  // Change format to YYYY-MM-DD
             className="px-4 py-2 border rounded-md"
             placeholderText="Pilih Tanggal"
           />
         </div>
-        <button className="bg-green-200 text-black font-semibold px-4 py-2 rounded-md mt-6">PRINT</button>
+        <button
+          onClick={onPrint}
+          className="bg-green-200 text-black font-semibold px-4 py-2 rounded-md mt-6"
+        >
+          PRINT
+        </button>
       </div>
     </div>
   );

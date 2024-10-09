@@ -8,6 +8,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface MenuItem {
   title: string;
@@ -82,6 +83,20 @@ const menuItems: MenuItem[] = [
 ];
 
 const Sidebar = () => {
+ 
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // Clear localStorage and cookies
+    localStorage.removeItem("token");
+    localStorage.removeItem("nama");
+    localStorage.removeItem("username");
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
+    document.cookie = "role_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
+
+    // Redirect to sign-in page
+    router.push("/sign-in");
+  };
   return (
     <div className="h-full relative">
       <div className="flex flex-col gap-6 justify-center items-center h-full">
@@ -89,7 +104,7 @@ const Sidebar = () => {
 
         <div className="max-w-max">
           <img
-            src="/logo/logo-transparent.webp"
+            src="/logo/ logo-transparent.webp"
             alt="logo"
             className="h-[30vh] w-auto"
           />
@@ -125,7 +140,7 @@ const Sidebar = () => {
                 )}
               </AccordionItem>
             ))}
-            <Link href={'/sign-in'} className="ml-[45px]">Logout</Link>
+            <button type="submit" className="ml-[45px]" onClick={handleLogout}>Logout</button>
           </Accordion>
         </div>
       </div>

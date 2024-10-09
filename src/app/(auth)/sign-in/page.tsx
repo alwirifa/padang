@@ -14,10 +14,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
-import Link from "next/link";
 
 const formSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
@@ -48,17 +46,26 @@ export default function Home() {
           {}
         )
         .then((response) => {
-          localStorage.setItem("token", response.data.data.token);
-          document.cookie = `token=${response.data.data.token}; path=/;`;
+          const { token, nama, username, role_id } = response.data.data;
 
-          localStorage.setItem("nama", response.data.data.nama);
-          localStorage.setItem("username", response.data.data.username);
+          localStorage.setItem("token", token);
+          document.cookie = `token=${token}; path=/;`;
 
-          document.cookie = `role_id=${response.data.data.role_id}; path=/;`;
+          localStorage.setItem("nama", nama);
+          localStorage.setItem("username", username);
+          document.cookie = `role_id=${role_id}; path=/;`;
 
-          document.cookie = `token=${response.data.data.token}; path=/;`;
+          // Debugging: Log role_id and redirect URL
+          console.log("Role ID:", role_id);
 
-          router.push("/dashboard");
+          if (role_id === 2) {
+            console.log("Redirecting to /dashboard-user");
+            router.push("/dashboard-user");
+          } else {
+            console.log("Redirecting to /dashboard");
+            router.push("/dashboard");
+          }
+
           console.log("Response:", response.data);
         })
         .catch((error) => {
